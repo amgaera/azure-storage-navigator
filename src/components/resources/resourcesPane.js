@@ -1,20 +1,28 @@
 "use strict";
 
-var React = require('react');
-var Reflux = require('reflux');
-var ResourceStore = require('../../stores/resourceStore');
-var StorageAccountList = require('./storageAccountList');
-var ResourceList = require('./resourceList');
+const React = require('react');
+const Reflux = require('reflux');
+const ResourceStore = require('../../stores/resourceStore');
+const StorageAccountList = require('./storageAccountList');
+const ResourceList = require('./resourceList');
+const AddAccountDialog = require('./addAccountDialog');
 
-let ResourcesPane = React.createClass({
+const ResourcesPane = React.createClass({
   mixins: [Reflux.connect(ResourceStore, 'storageAccounts')],
+
+  openAddAccountDialog: function() {
+    this.refs.addAccountDialog.show();
+  },
 
   render: function() {
     return (
-      <div>
-        <h2>Storage Accounts</h2>
-        <StorageAccountList storageAccounts={this.state.storageAccounts}>
-        </StorageAccountList>
+      <div className="resources-pane">
+        <h3 className="text-center">Storage Accounts</h3>
+        <StorageAccountList storageAccounts={this.state.storageAccounts} />
+        <button className="btn btn-default btn-block" type="button" onClick={this.openAddAccountDialog}>
+          <span className="glyphicon glyphicon-plus"></span> Add account
+        </button>
+        <AddAccountDialog ref="addAccountDialog" />
       </div>
     );
   }
