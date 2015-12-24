@@ -1,8 +1,9 @@
 "use strict";
 
-let Reflux = require('reflux');
+const Reflux = require('reflux');
 
-let StorageAccountActions = Reflux.createActions([
+const StorageAccountActions = Reflux.createActions([
+  'addStorageAccount',
   'connectToStorageAccount'
 ]);
 

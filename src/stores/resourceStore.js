@@ -19,6 +19,16 @@ let ResourceStore = Reflux.createStore({
     }
   },
 
+  onAddStorageAccount: function(name, key) {
+    this.storageAccounts[name] = {
+      name: name,
+      key: key,
+      isConnected: false
+    };
+
+    this.trigger(this.storageAccounts);
+  },
+
   onConnectToStorageAccount: function(accountId) {
     this.storageAccounts[accountId].isConnected = true;
     window.setTimeout(() => this.trigger(this.storageAccounts), 1000);

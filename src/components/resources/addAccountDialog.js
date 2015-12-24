@@ -6,6 +6,10 @@ const ModalDialog = require('../common/modalDialog');
 const FormInput = require('../common/formInput');
 
 const AddAccountDialog = React.createClass({
+  propTypes: {
+    onSave: React.PropTypes.func.isRequired
+  },
+
   getInitialState: function() {
     return {
       account: { name: '', key: '' },
@@ -38,8 +42,11 @@ const AddAccountDialog = React.createClass({
       hasErrors = true;
     }
 
-    if (hasErrors || !_.isEmpty(this.state.errors)) {
+    if (hasErrors) {
       this.setState({errors: errors});
+    } else {
+      this.props.onSave(this.state.account);
+      this.refs.dialog.hide();
     }
   },
 

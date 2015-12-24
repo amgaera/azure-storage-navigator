@@ -35,6 +35,11 @@ const ModalDialog = React.createClass({
     dialogNode.modal();
   },
 
+  hide: function() {
+    const dialogNode = $(this.refs.dialog.getDOMNode());
+    dialogNode.modal('hide');
+  },
+
   render: function() {
     const header = (
       <div className="modal-header">
