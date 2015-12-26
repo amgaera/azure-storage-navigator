@@ -4,26 +4,55 @@ const Reflux = require('reflux');
 const _ = require('lodash');
 const AzureStorage = window.require('azure-storage');
 
+const LOCAL_STORAGE_ACCOUNTS_KEY = 'storageAccounts';
+
 const ResourceStore = Reflux.createStore({
   listenables: [
+    require('../actions/initializeActions'),
     require('../actions/storageAccountActions')
   ],
 
   storageAccounts: {
     'devstorage': {
       name: 'devstorage',
-      isConnected: false
+      isConnected: false,
+      isEmulated: true
     }
   },
 
-  onAddStorageAccount: function(name, key) {
-    this.storageAccounts[name] = {
+  createStorageAccount: function(name, key) {
+    return {
       name: name,
       key: key,
       isConnected: false,
+      isEmulated: false,
       resources: {}
     };
+  },
 
+  saveStorageAccounts: function() {
+    const realAccounts = _.filter(this.storageAccounts, account => !account.isEmulated);
+    const coreAccountsData = _.map(realAccounts, account => ({ name: account.name, key: account.key }));
+
+    localStorage.setItem(LOCAL_STORAGE_ACCOUNTS_KEY, JSON.stringify(coreAccountsData));
+  },
+
+  loadStorageAccounts: function() {
+    const coreAccountsData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_ACCOUNTS_KEY));
+    const accountPairs = _.map(coreAccountsData, data => [data.name, this.createStorageAccount(data.name, data.key)]);
+
+    return _.zipObject(accountPairs);
+  },
+
+  onInitializeApp: function() {
+    this.storageAccounts = _.merge(this.storageAccounts, this.loadStorageAccounts());
+    this.trigger(this.storageAccounts);
+  },
+
+  onAddStorageAccount: function(name, key) {
+    this.storageAccounts[name] = this.createStorageAccount(name, key);
+
+    this.saveStorageAccounts();
     this.trigger(this.storageAccounts);
   },
 

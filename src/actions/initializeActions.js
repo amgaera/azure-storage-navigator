@@ -3,7 +3,7 @@
 let Reflux = require('reflux');
 
 let InitializeActions = Reflux.createActions([
-  "initApp"
+  "initializeApp"
 ]);
 
 module.exports = InitializeActions;
