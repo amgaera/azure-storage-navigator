@@ -3,6 +3,16 @@
     margin-bottom: 0;
   }
 
+  .list-group-item {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    
+    .glyphicon {
+      margin-right: 5px;
+    }
+  }
+
   .list-group .list-group-item {
     padding-left: 30px;
   }
@@ -18,8 +28,4 @@
   .list-group-item:last-child {
     border-bottom-width: 0;
   }
-}
-
-.list-group-item .glyphicon {
-  margin-right: 5px;
 }

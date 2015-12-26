@@ -1,14 +1,14 @@
 "use strict";
 
-let React = require('react');
-let _ = require('lodash');
+const React = require('react');
+const _ = require('lodash');
 
-let LazyList = require('../common/lazyList');
-let LazyListEntry = require('../common/lazyListEntry');
-var ResourceList = require('./resourceList');
-let StorageAccountActions = require('../../actions/storageAccountActions');
+const LazyList = require('../common/lazyList');
+const LazyListEntry = require('../common/lazyListEntry');
+const ResourceList = require('./resourceList');
+const StorageAccountActions = require('../../actions/storageAccountActions');
 
-let ResourceTypeList = React.createClass({
+const ResourceTypeList = React.createClass({
   propTypes: {
     storageAccount: React.PropTypes.object.isRequired
   },
@@ -19,23 +19,19 @@ let ResourceTypeList = React.createClass({
     }
   },
 
-  createResourceTypeRow: function(resourceType) {
-    let resourceTypeLabel = _.capitalize(resourceType) + 's';
-
-    return (
-      <LazyListEntry key={resourceType} label={resourceTypeLabel}>
-        <ResourceList />
-      </LazyListEntry>
-    );
-  },
-
   render: function() {
     if (this.props.storageAccount.isConnected) {
-      let resourceTypes = ['blob', 'table', 'queue'];
-
       return (
         <LazyList>
-          {_.map(resourceTypes, this.createResourceTypeRow, this)}
+          <LazyListEntry key="blob" label="Blobs">
+            <ResourceList resourceType="blob" storageAccount={this.props.storageAccount} loadAction={StorageAccountActions.loadBlobContainers} />
+          </LazyListEntry>
+          <LazyListEntry key="table" label="Tables">
+            <ResourceList resourceType="table" storageAccount={this.props.storageAccount} loadAction={StorageAccountActions.loadTables} />
+          </LazyListEntry>
+          <LazyListEntry key="queue" label="Queues">
+            <ResourceList resourceType="queue" storageAccount={this.props.storageAccount} loadAction={StorageAccountActions.loadQueues} />
+          </LazyListEntry>
         </LazyList>
       );
     }

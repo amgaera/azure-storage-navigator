@@ -1,9 +1,10 @@
 "use strict";
 
-let Reflux = require('reflux');
-let _ = require('lodash');
+const Reflux = require('reflux');
+const _ = require('lodash');
+const AzureStorage = window.require('azure-storage');
 
-let ResourceStore = Reflux.createStore({
+const ResourceStore = Reflux.createStore({
   listenables: [
     require('../actions/storageAccountActions')
   ],
@@ -12,10 +13,6 @@ let ResourceStore = Reflux.createStore({
     'devstorage': {
       name: 'devstorage',
       isConnected: false
-    },
-    'otherstorage': {
-      name: 'otherstorage',
-      isConnected: false
     }
   },
 
@@ -23,7 +20,8 @@ let ResourceStore = Reflux.createStore({
     this.storageAccounts[name] = {
       name: name,
       key: key,
-      isConnected: false
+      isConnected: false,
+      resources: {}
     };
 
     this.trigger(this.storageAccounts);
@@ -32,6 +30,51 @@ let ResourceStore = Reflux.createStore({
   onConnectToStorageAccount: function(accountId) {
     this.storageAccounts[accountId].isConnected = true;
     window.setTimeout(() => this.trigger(this.storageAccounts), 1000);
+  },
+
+  onLoadBlobContainers: function(accountName) {
+    const accessKey = this.storageAccounts[accountName].key;
+    const blobService = AzureStorage.createBlobService(accountName, accessKey);
+
+    blobService.listContainersSegmented(null, (error, result, response) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      this.storageAccounts[accountName].resources.blob = _.map(result.entries, entry => entry.name);
+      this.trigger(this.storageAccounts);
+    });
+  },
+
+  onLoadTables: function(accountName) {
+    const accessKey = this.storageAccounts[accountName].key;
+    const tableService = AzureStorage.createTableService(accountName, accessKey);
+
+    tableService.listTablesSegmented(null, (error, result, response) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      this.storageAccounts[accountName].resources.table = result.entries;
+      this.trigger(this.storageAccounts);
+    });
+  },
+
+  onLoadQueues: function(accountName) {
+    const accessKey = this.storageAccounts[accountName].key;
+    const queueService = AzureStorage.createQueueService(accountName, accessKey);
+
+    queueService.listQueuesSegmented(null, (error, result, response) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      this.storageAccounts[accountName].resources.queue = _.map(result.entries, entry => entry.name);
+      this.trigger(this.storageAccounts);
+    });
   },
 
   getInitialState: function() {
