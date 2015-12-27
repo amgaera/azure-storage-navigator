@@ -1,11 +1,12 @@
 "use strict";
 
-let React = require('react');
-let _ = require('lodash');
+const React = require('react');
+const _ = require('lodash');
 
-let StorageAccountActions = require('../../actions/storageAccountActions');
+const StorageAccountActions = require('../../actions/storageAccountActions');
+const TabActions = require('../../actions/tabActions');
 
-let ResourceList = React.createClass({
+const ResourceList = React.createClass({
   propTypes: {
     resourceType: React.PropTypes.string.isRequired,
     loadAction: React.PropTypes.func.isRequired,
@@ -18,9 +19,18 @@ let ResourceList = React.createClass({
     }
   },
 
+  openResourceViewerTab: function(resourceName, clickEvent) {
+    clickEvent.preventDefault();
+
+    const viewerUrl = `#/${this.props.resourceType}/${this.props.storageAccount.name}/${resourceName}`;
+    TabActions.switchToOrOpenTab(viewerUrl, resourceName);
+  },
+
   createResourceRow: function(resourceName) {
+    const onClickFunc = _.partial(this.openResourceViewerTab, resourceName);
+
     return (
-      <li key={resourceName} className="list-group-item">{resourceName}</li>
+      <a key={resourceName} href="#" className="list-group-item" onClick={onClickFunc}>{resourceName}</a>
     );
   },
 
@@ -37,9 +47,9 @@ let ResourceList = React.createClass({
     const resourceNames = this.props.storageAccount.resources[this.props.resourceType];
 
     return (
-      <ul className="list-group">
+      <div className="list-group">
         {_.map(resourceNames, this.createResourceRow, this)}
-      </ul>
+      </div>
     );
   }
 });
