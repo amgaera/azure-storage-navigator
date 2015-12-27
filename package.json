@@ -1,13 +1,14 @@
 {
   "name": "azure-storage-navigator",
   "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Connect to Azure storage accounts and query blobs, queues, and tables",
+  "main": "init.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Artur Grunau",
-  "license": "ISC",
+  "license": "MPL-2.0",
+  "repository": "amgaera/azure-storage-navigator",
   "dependencies": {
     "azure-storage": "^0.6.0",
     "bootstrap": "^3.3.5",
@@ -15,6 +16,9 @@
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
     "gulp-eslint": "^0.15.0",
+    "gulp-json-transform": "^0.3.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.1.0",
     "jquery": "^2.1.4",
     "lodash": "^3.10.0",
     "react": "^0.13.3",
@@ -24,7 +28,6 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "devDependencies": {
-    "gulp-run-electron": "^1.2.2",
-    "gulp-sass": "^2.1.0"
+    "gulp-run-electron": "^1.2.2"
   }
 }

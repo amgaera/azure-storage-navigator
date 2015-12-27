@@ -7,6 +7,8 @@ var sass = require('gulp-sass');
 var source = require('vinyl-source-stream');
 var concat = require('gulp-concat');
 var lint = require('gulp-eslint');
+var jsonTransform = require('gulp-json-transform');
+var rename = require('gulp-rename');
 var runElectron = require('gulp-run-electron');
 
 var config = {
@@ -20,13 +22,10 @@ var config = {
       'node_modules/bootstrap/dist/css/bootstrap-theme.min.css'
     ],
     dist: './dist',
+    electronInitJs: './src/electron-init.js',
     mainJs: './src/main.js'
   }
 }
-
-gulp.task('open', function() {
-  gulp.src('dist').pipe(runElectron());
-});
 
 gulp.task('html', function() {
   gulp.src(config.paths.html)
@@ -45,7 +44,7 @@ gulp.task('js', function() {
     .pipe(gulp.dest(config.paths.dist + '/scripts'));
 });
 
-gulp.task('sass', function () {
+gulp.task('sass', function() {
   gulp.src(config.paths.sass)
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest(config.paths.dist + '/css'));
@@ -57,15 +56,39 @@ gulp.task('css', function() {
     .pipe(gulp.dest(config.paths.dist + '/css'));
 });
 
-gulp.task('images', function () {
+gulp.task('images', function() {
   gulp.src(config.paths.images)
     .pipe(gulp.dest(config.paths.dist + '/images'))
 });
+
+gulp.task('electron-config', function() {
+  gulp.src(config.paths.electronInitJs)
+    .pipe(rename('init.js'))
+    .pipe(gulp.dest(config.paths.dist))
+
+  var simplifyPackageJson = function(packageJson) {
+    delete packageJson.dependencies;
+    delete packageJson.devDependencies;
+    delete packageJson.scripts;
+
+    return packageJson;
+  };
+
+  gulp.src('package.json')
+    .pipe(jsonTransform(simplifyPackageJson, 2))
+    .pipe(gulp.dest(config.paths.dist))
+});
+
+gulp.task('content', ['html', 'js', 'sass', 'css', 'images', 'electron-config']);
 
 gulp.task('lint', function() {
   return gulp.src(config.paths.js)
     .pipe(lint({config: 'eslint.config.json'}))
     .pipe(lint.format());
+});
+
+gulp.task('open', ['content'], function() {
+  gulp.src('dist').pipe(runElectron());
 });
 
 gulp.task('watch', function() {
@@ -74,4 +97,4 @@ gulp.task('watch', function() {
   gulp.watch(config.paths.sass, ['sass']);
 });
 
-gulp.task('default', ['html', 'js', 'sass', 'css', 'images', 'lint', 'open', 'watch']);
+gulp.task('default', ['content', 'lint', 'open', 'watch']);
