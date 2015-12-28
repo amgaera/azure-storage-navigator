@@ -1,12 +1,12 @@
 /*eslint-disable strict */ //Disabling check because we can't run strict mode. Need global vars.
 
-var React = require('react');
-var TabList = require('./common/tabList');
-var ResourcesPane = require('./resources/resourcesPane');
-var RouteHandler = require('react-router').RouteHandler;
+const React = require('react');
 $ = jQuery = require('jquery');
 
-var App = React.createClass({
+const ResourcesPane = require('./resources/resourcesPane');
+const TabList = require('./common/tabList');
+
+const App = React.createClass({
   render: function() {
     return (
       <div className="container-fluid">
@@ -16,7 +16,7 @@ var App = React.createClass({
           </div>
           <div className="col-xs-9">
             <TabList/>
-            <RouteHandler />
+            {this.props.children}
           </div>
         </div>
       </div>

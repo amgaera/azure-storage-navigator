@@ -1,13 +1,13 @@
 "use strict";
 
-let React = require('react');
-let Link = require('react-router').Link;
+const React = require('react');
+const IndexLink = require('react-router').IndexLink;
 
-let ErrorPage = React.createClass({
+const ErrorPage = React.createClass({
   render: function() {
     return (
       <div className="alert alert-danger" role="alert">
-        <p>Oh snap! Something went wrong. <Link to="app" className="alert-link">Click here</Link> to reload
+        <p>Oh snap! Something went wrong. <IndexLink to="/" className="alert-link">Click here</IndexLink> to reload
           the application.</p>
       </div>
     );

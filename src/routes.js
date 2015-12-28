@@ -1,16 +1,14 @@
 "use strict";
 
-let React = require('react');
+const React = require('react');
+const ReactRouter = require('react-router');
+const IndexRoute = ReactRouter.IndexRoute;
+const Route = ReactRouter.Route;
 
-let Router = require('react-router');
-let DefaultRoute = Router.DefaultRoute;
-let Route = Router.Route;
-let NotFoundRoute = Router.NotFoundRoute;
-
-let routes = (
-  <Route name="app" path="/" handler={require('./components/app')}>
-    <DefaultRoute handler={require('./components/startPage')} />
-    <NotFoundRoute handler={require('./components/errorPage')} />
+const routes = (
+  <Route path="/" component={require('./components/app')}>
+    <IndexRoute component={require('./components/startPage')} />
+    <Route path="*" component={require('./components/errorPage')} />
   </Route>
 );
 
