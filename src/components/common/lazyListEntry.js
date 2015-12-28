@@ -21,7 +21,7 @@ let LazyListEntry = React.createClass({
       return;
     }
 
-    let domNode = $(node.getDOMNode());
+    const domNode = $(node);
     domNode.on('hidden.bs.collapse', event => {
       this.setState({expanded: false});
       return false;

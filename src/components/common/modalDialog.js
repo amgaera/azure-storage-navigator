@@ -19,7 +19,7 @@ const ModalDialog = React.createClass({
   },
 
   componentDidMount: function() {
-    const dialogNode = $(this.refs.dialog.getDOMNode());
+    const dialogNode = $(this.refs.dialog);
 
     dialogNode.on('hidden.bs.modal', event => {
       this.setState({visible: false});
@@ -29,14 +29,14 @@ const ModalDialog = React.createClass({
   },
 
   show: function() {
-    const dialogNode = $(this.refs.dialog.getDOMNode());
+    const dialogNode = $(this.refs.dialog);
 
     this.setState({visible: true});
     dialogNode.modal();
   },
 
   hide: function() {
-    const dialogNode = $(this.refs.dialog.getDOMNode());
+    const dialogNode = $(this.refs.dialog);
     dialogNode.modal('hide');
   },
 
