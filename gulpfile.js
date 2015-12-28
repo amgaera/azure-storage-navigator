@@ -15,6 +15,7 @@ var config = {
   paths: {
     html: './src/*.html',
     js: './src/**/*.js',
+    fonts: 'node_modules/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2',
     images: './src/images/*',
     sass: './src/**/*.scss',
     css: [
@@ -56,6 +57,11 @@ gulp.task('css', function() {
     .pipe(gulp.dest(config.paths.dist + '/css'));
 });
 
+gulp.task('fonts', function() {
+  gulp.src(config.paths.fonts)
+    .pipe(gulp.dest(config.paths.dist + '/fonts'))
+});
+
 gulp.task('images', function() {
   gulp.src(config.paths.images)
     .pipe(gulp.dest(config.paths.dist + '/images'))
@@ -79,7 +85,7 @@ gulp.task('electron-config', function() {
     .pipe(gulp.dest(config.paths.dist))
 });
 
-gulp.task('content', ['html', 'js', 'sass', 'css', 'images', 'electron-config']);
+gulp.task('content', ['html', 'js', 'sass', 'css', 'fonts', 'images', 'electron-config']);
 
 gulp.task('lint', function() {
   return gulp.src(config.paths.js)
