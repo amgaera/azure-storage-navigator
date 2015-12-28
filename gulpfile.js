@@ -89,7 +89,7 @@ gulp.task('content', ['html', 'js', 'sass', 'css', 'fonts', 'images', 'electron-
 
 gulp.task('lint', function() {
   return gulp.src(config.paths.js)
-    .pipe(lint({config: 'eslint.config.json'}))
+    .pipe(lint({config: '.eslintrc.json'}))
     .pipe(lint.format());
 });
 
