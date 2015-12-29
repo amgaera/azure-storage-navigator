@@ -8,6 +8,7 @@ const Route = ReactRouter.Route;
 const routes = (
   <Route path="/" component={require('./components/app')}>
     <IndexRoute component={require('./components/startPage')} />
+    <Route path="blobs/:storageAccount/:container" component={require('./components/blobs/blobContainerViewer')} />
     <Route path="*" component={require('./components/errorPage')} />
   </Route>
 );
