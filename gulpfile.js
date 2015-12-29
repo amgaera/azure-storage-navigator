@@ -18,7 +18,7 @@ var config = {
     fonts: 'node_modules/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2',
     images: './src/images/*',
     sass: './src/**/*.scss',
-    css: [
+    bootstrapCss: [
       'node_modules/bootstrap/dist/css/bootstrap.min.css',
       'node_modules/bootstrap/dist/css/bootstrap-theme.min.css'
     ],
@@ -48,12 +48,13 @@ gulp.task('js', function() {
 gulp.task('sass', function() {
   gulp.src(config.paths.sass)
     .pipe(sass().on('error', sass.logError))
+    .pipe(concat('bundle.css'))
     .pipe(gulp.dest(config.paths.dist + '/css'));
 });
 
-gulp.task('css', function() {
-  gulp.src(config.paths.css)
-    .pipe(concat('bundle.css'))
+gulp.task('bootstrap-css', function() {
+  gulp.src(config.paths.bootstrapCss)
+    .pipe(concat('bootstrap.css'))
     .pipe(gulp.dest(config.paths.dist + '/css'));
 });
 
@@ -85,7 +86,7 @@ gulp.task('electron-config', function() {
     .pipe(gulp.dest(config.paths.dist))
 });
 
-gulp.task('content', ['html', 'js', 'sass', 'css', 'fonts', 'images', 'electron-config']);
+gulp.task('content', ['html', 'js', 'sass', 'bootstrap-css', 'fonts', 'images', 'electron-config']);
 
 gulp.task('lint', function() {
   return gulp.src(config.paths.js)
