@@ -2,14 +2,14 @@
 
 const React = require('react');
 const Reflux = require('reflux');
-const ResourceStore = require('../../stores/resourceStore');
+
+const AccountStore = require('../../stores/accountStore');
 const StorageAccountList = require('./storageAccountList');
-const ResourceList = require('./resourceList');
 const AddAccountDialog = require('./addAccountDialog');
 const StorageAccountActions = require('../../actions/storageAccountActions');
 
-const ResourcesPane = React.createClass({
-  mixins: [Reflux.connect(ResourceStore, 'storageAccounts')],
+const AccountsPane = React.createClass({
+  mixins: [Reflux.connect(AccountStore, 'storageAccounts')],
 
   openAddAccountDialog: function() {
     this.refs.addAccountDialog.show();
@@ -33,4 +33,4 @@ const ResourcesPane = React.createClass({
   }
 });
 
-module.exports = ResourcesPane;
+module.exports = AccountsPane;

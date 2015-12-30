@@ -6,7 +6,7 @@ const AzureStorage = window.require('azure-storage');
 
 const LOCAL_STORAGE_ACCOUNTS_KEY = 'storageAccounts';
 
-const ResourceStore = Reflux.createStore({
+const AccountStore = Reflux.createStore({
   listenables: [
     require('../actions/initializeActions'),
     require('../actions/storageAccountActions')
@@ -111,4 +111,4 @@ const ResourceStore = Reflux.createStore({
   }
 });
 
-module.exports = ResourceStore;
+module.exports = AccountStore;

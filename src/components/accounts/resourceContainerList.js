@@ -6,7 +6,7 @@ const _ = require('lodash');
 const StorageAccountActions = require('../../actions/storageAccountActions');
 const TabActions = require('../../actions/tabActions');
 
-const ResourceList = React.createClass({
+const ResourceContainerList = React.createClass({
   propTypes: {
     resourceType: React.PropTypes.string.isRequired,
     loadAction: React.PropTypes.func.isRequired,
@@ -54,4 +54,4 @@ const ResourceList = React.createClass({
   }
 });
 
-module.exports = ResourceList;
+module.exports = ResourceContainerList;

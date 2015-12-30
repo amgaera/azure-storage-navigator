@@ -5,7 +5,7 @@ const _ = require('lodash');
 
 const LazyList = require('../common/lazyList');
 const LazyListEntry = require('../common/lazyListEntry');
-const ResourceList = require('./resourceList');
+const ResourceContainerList = require('./resourceContainerList');
 const StorageAccountActions = require('../../actions/storageAccountActions');
 
 const ResourceTypeList = React.createClass({
@@ -24,13 +24,22 @@ const ResourceTypeList = React.createClass({
       return (
         <LazyList>
           <LazyListEntry key="blob" label="Blobs">
-            <ResourceList resourceType="blob" storageAccount={this.props.storageAccount} loadAction={StorageAccountActions.loadBlobContainers} />
+            <ResourceContainerList
+              resourceType="blob"
+              storageAccount={this.props.storageAccount}
+              loadAction={StorageAccountActions.loadBlobContainers} />
           </LazyListEntry>
           <LazyListEntry key="table" label="Tables">
-            <ResourceList resourceType="table" storageAccount={this.props.storageAccount} loadAction={StorageAccountActions.loadTables} />
+            <ResourceContainerList
+              resourceType="table"
+              storageAccount={this.props.storageAccount}
+              loadAction={StorageAccountActions.loadTables} />
           </LazyListEntry>
           <LazyListEntry key="queue" label="Queues">
-            <ResourceList resourceType="queue" storageAccount={this.props.storageAccount} loadAction={StorageAccountActions.loadQueues} />
+            <ResourceContainerList
+              resourceType="queue"
+              storageAccount={this.props.storageAccount}
+              loadAction={StorageAccountActions.loadQueues} />
           </LazyListEntry>
         </LazyList>
       );
