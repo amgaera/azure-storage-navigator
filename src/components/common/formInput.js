@@ -7,6 +7,7 @@ const FormInput = React.createClass({
   propTypes: {
     label: React.PropTypes.string.isRequired,
     value: React.PropTypes.string.isRequired,
+    placeholder: React.PropTypes.string,
     error: React.PropTypes.string,
     onChange: React.PropTypes.func.isRequired
   },
@@ -28,6 +29,7 @@ const FormInput = React.createClass({
           className="form-control"
           id={this.state.inputId}
           value={this.props.value}
+          placeholder={this.props.placeholder}
           onChange={this.props.onChange} />
         <span className="help-block">{this.props.error}</span>
       </div>
