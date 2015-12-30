@@ -21,8 +21,8 @@ const ResourcesPane = React.createClass({
 
   render: function() {
     return (
-      <div className="resources-pane">
-        <h3 className="text-center">Storage Accounts</h3>
+      <div className="resources-pane well">
+        <h4 className="text-center">Storage Accounts</h4>
         <StorageAccountList storageAccounts={this.state.storageAccounts} />
         <button className="btn btn-default btn-block" type="button" onClick={this.openAddAccountDialog}>
           <span className="glyphicon glyphicon-plus"></span> Add account

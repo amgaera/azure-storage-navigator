@@ -9,13 +9,13 @@ const TabList = require('./common/tabList');
 const App = React.createClass({
   render: function() {
     return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-xs-3">
-            <ResourcesPane />
-          </div>
-          <div className="col-xs-9">
+      <div>
+        <ResourcesPane />
+        <div className="main-pane panel panel-default">
+          <div className="panel-heading">
             <TabList/>
+          </div>
+          <div className="panel-body">
             {this.props.children}
           </div>
         </div>

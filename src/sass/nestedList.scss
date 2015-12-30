@@ -1,13 +1,21 @@
 .list-group.tree-list {
+  box-shadow: none;
+
   .list-group {
     margin-bottom: 0;
+    box-shadow: none;
   }
 
   .list-group-item {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    
+
+    border-width: 0px;
+    padding: 2px 5px;
+
+    background-color: inherit;
+
     .glyphicon {
       margin-right: 5px;
     }

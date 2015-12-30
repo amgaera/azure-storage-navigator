@@ -1,0 +1,12 @@
+html, body, #app {
+  height: 100%;
+}
+
+#app.container-fluid {
+  padding: 0px;
+
+  > div {
+    display: flex;
+    height: 100%;
+  }
+}
