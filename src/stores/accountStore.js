@@ -4,6 +4,8 @@ const Reflux = require('reflux');
 const _ = require('lodash');
 const AzureStorage = window.require('azure-storage');
 
+const ResourceActions = require('../actions/resourceActions');
+
 const LOCAL_STORAGE_ACCOUNTS_KEY = 'storageAccounts';
 const RESOURCE_TYPES = Object.freeze({
   BLOB: 'blob',
@@ -14,6 +16,7 @@ const RESOURCE_TYPES = Object.freeze({
 const AccountStore = Reflux.createStore({
   listenables: [
     require('../actions/initializeActions'),
+    ResourceActions,
     require('../actions/storageAccountActions')
   ],
 
@@ -95,7 +98,7 @@ const AccountStore = Reflux.createStore({
 
   onConnectToStorageAccount: function(accountId) {
     this.storageAccounts[accountId].isConnected = true;
-    window.setTimeout(() => this.trigger(this.storageAccounts), 1000);
+    this.trigger(this.storageAccounts);
   },
 
   onLoadBlobContainers: function(accountName) {
@@ -137,6 +140,19 @@ const AccountStore = Reflux.createStore({
 
       this.storageAccounts[accountName].resources.queue = _.map(result.entries, entry => entry.name);
       this.trigger(this.storageAccounts);
+    });
+  },
+
+  onLoadBlobList: function(accountName, container, prefix) {
+    const blobService = this.getService(accountName, RESOURCE_TYPES.BLOB);
+
+    blobService.listBlobsSegmentedWithPrefix(container, prefix, null, (error, result, response) => {
+      if (error) {
+        ResourceActions.loadBlobList.failed(accountName, container, prefix, error);
+        return;
+      }
+
+      ResourceActions.loadBlobList.completed(accountName, container, prefix, result.entries, result.continuationToken);
     });
   },
 
