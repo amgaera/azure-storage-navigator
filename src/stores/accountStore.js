@@ -5,6 +5,11 @@ const _ = require('lodash');
 const AzureStorage = window.require('azure-storage');
 
 const LOCAL_STORAGE_ACCOUNTS_KEY = 'storageAccounts';
+const RESOURCE_TYPES = Object.freeze({
+  BLOB: 'blob',
+  TABLE: 'table',
+  QUEUE: 'queue'
+});
 
 const AccountStore = Reflux.createStore({
   listenables: [
@@ -26,7 +31,8 @@ const AccountStore = Reflux.createStore({
       key: key,
       isConnected: false,
       isEmulated: false,
-      resources: {}
+      resources: {},
+      services: {}
     };
   },
 
@@ -42,6 +48,37 @@ const AccountStore = Reflux.createStore({
     const accountPairs = _.map(coreAccountsData, data => [data.name, this.createStorageAccount(data.name, data.key)]);
 
     return _.zipObject(accountPairs);
+  },
+
+  getService: function(accountName, resourceType) {
+    if (!_.has(this.storageAccounts, accountName)) {
+      throw new Error(`Unknown storage account: ${accountName}`);
+    }
+
+    const account = this.storageAccounts[accountName];
+
+    if (_.has(account.services, resourceType)) {
+      return account.services[resourceType];
+    }
+
+    let service;
+
+    switch (resourceType) {
+      case RESOURCE_TYPES.BLOB:
+        service = AzureStorage.createBlobService(accountName, account.key);
+        break;
+      case RESOURCE_TYPES.TABLE:
+        service = AzureStorage.createTableService(accountName, account.key);
+        break;
+      case RESOURCE_TYPES.QUEUE:
+        service = AzureStorage.createQueueService(accountName, account.key);
+        break;
+      default:
+        throw new Error(`Unsupported resource type: ${resourceType}`);
+    }
+
+    account.services[resourceType] = service;
+    return service;
   },
 
   onInitializeApp: function() {
@@ -62,8 +99,7 @@ const AccountStore = Reflux.createStore({
   },
 
   onLoadBlobContainers: function(accountName) {
-    const accessKey = this.storageAccounts[accountName].key;
-    const blobService = AzureStorage.createBlobService(accountName, accessKey);
+    const blobService = this.getService(accountName, RESOURCE_TYPES.BLOB);
 
     blobService.listContainersSegmented(null, (error, result, response) => {
       if (error) {
@@ -77,8 +113,7 @@ const AccountStore = Reflux.createStore({
   },
 
   onLoadTables: function(accountName) {
-    const accessKey = this.storageAccounts[accountName].key;
-    const tableService = AzureStorage.createTableService(accountName, accessKey);
+    const tableService = this.getService(accountName, RESOURCE_TYPES.TABLE);
 
     tableService.listTablesSegmented(null, (error, result, response) => {
       if (error) {
@@ -92,8 +127,7 @@ const AccountStore = Reflux.createStore({
   },
 
   onLoadQueues: function(accountName) {
-    const accessKey = this.storageAccounts[accountName].key;
-    const queueService = AzureStorage.createQueueService(accountName, accessKey);
+    const queueService = this.getService(accountName, RESOURCE_TYPES.QUEUE);
 
     queueService.listQueuesSegmented(null, (error, result, response) => {
       if (error) {
