@@ -15,9 +15,7 @@ const App = React.createClass({
           <div className="panel-heading">
             <TabList/>
           </div>
-          <div className="panel-body">
-            {this.props.children}
-          </div>
+          {this.props.children}
         </div>
       </div>
     );
