@@ -12,10 +12,15 @@ const TabStore = require('../../stores/tabStore');
 const TabList = React.createClass({
   mixins: [Reflux.connect(TabStore, 'tabState')],
 
+  onTabClick: function(tabIndex, clickEvent) {
+    clickEvent.preventDefault();
+    TabActions.switchToTab(tabIndex);
+  },
+
   createTabElement: function(tabData, index) {
     const elementKey = `tab${index}`;
     const elementClass = index === this.state.tabState.activeTabIndex ? 'active' : null;
-    const onClickFunc = _.partial(TabActions.switchToTab, index);
+    const onClickFunc = _.partial(this.onTabClick, index);
 
     return (
       <li key={elementKey} role="presentation" className={elementClass}>
