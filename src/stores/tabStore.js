@@ -27,6 +27,14 @@ const TabStore = Reflux.createStore({
     ContentActions.openUrl(contentUrl);
   },
 
+  onOpenInActiveTab(contentUrl) {
+    const activeTab = this.tabState.openTabs[this.tabState.activeTabIndex];
+    activeTab.contentUrl = contentUrl;
+
+    this.trigger(this.tabState);
+    ContentActions.openUrl(contentUrl);
+  },
+
   onSwitchToTab(tabIndex) {
     const maxTabIndex = this.tabState.openTabs.length - 1;
 
