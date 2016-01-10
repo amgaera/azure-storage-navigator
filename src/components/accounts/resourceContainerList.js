@@ -22,7 +22,7 @@ const ResourceContainerList = React.createClass({
   openResourceViewerTab: function(resourceName, clickEvent) {
     clickEvent.preventDefault();
 
-    const viewerUrl = `#/${this.props.resourceType}s/${this.props.storageAccount.name}/${resourceName}`;
+    const viewerUrl = `/${this.props.resourceType}s/${this.props.storageAccount.name}/${resourceName}`;
     TabActions.switchToOrOpenTab(viewerUrl, resourceName);
   },
 

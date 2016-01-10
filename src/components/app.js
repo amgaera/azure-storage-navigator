@@ -12,10 +12,7 @@ const App = React.createClass({
       <div>
         <AccountsPane />
         <div className="main-pane panel panel-default">
-          <div className="panel-heading">
-            <TabList/>
-          </div>
-          {this.props.children}
+          <TabList/>
         </div>
       </div>
     );

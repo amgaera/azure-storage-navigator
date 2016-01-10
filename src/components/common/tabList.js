@@ -2,19 +2,41 @@
 
 const React = require('react');
 const Reflux = require('reflux');
-const Router = require('react-router');
-const Link = Router.Link;
+const ReactRouter = require('react-router');
 const _ = require('lodash');
 
+const routes = require('../../routes');
 const TabActions = require('../../actions/tabActions');
 const TabStore = require('../../stores/tabStore');
 
 const TabList = React.createClass({
   mixins: [Reflux.connect(TabStore, 'tabState')],
 
+  getInitialState: function() {
+    return {
+      tabContents: {}
+    };
+  },
+
   onTabClick: function(tabIndex, clickEvent) {
     clickEvent.preventDefault();
     TabActions.switchToTab(tabIndex);
+  },
+
+  getActiveTabContents: function(tabData) {
+    let tabContents = this.state.tabContents[tabData.contentUrl];
+
+    if (tabContents) {
+      return tabContents;
+    }
+
+    ReactRouter.match({routes, location: tabData.contentUrl}, (error, redirectLocation, renderProps) => {
+      // renderProps.components[0] corresponds to the wrapper route and is undefined
+      tabContents = React.createElement(renderProps.components[1], renderProps.params);
+    });
+
+    this.state.tabContents[tabData.contentUrl] = tabContents;
+    return tabContents;
   },
 
   createTabElement: function(tabData, index) {
@@ -30,12 +52,19 @@ const TabList = React.createClass({
   },
 
   render: function() {
-    const tabs = _.map(this.state.tabState.openTabs, this.createTabElement);
+    const openTabs = this.state.tabState.openTabs;
+    const tabs = _.map(openTabs, this.createTabElement);
+    const tabContents = this.getActiveTabContents(openTabs[this.state.tabState.activeTabIndex]);
 
     return (
-      <ul className="nav nav-pills">
-        {tabs}
-      </ul>
+      <div>
+        <div className="panel-heading">
+          <ul className="nav nav-pills">
+            {tabs}
+          </ul>
+        </div>
+        {tabContents}
+      </div>
     );
   }
 });

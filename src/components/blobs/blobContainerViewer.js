@@ -12,7 +12,8 @@ const BlobContainerViewer = React.createClass({
   mixins: [Reflux.listenTo(ResourceStore, 'onResourcesChange', 'onResourcesChange')],
 
   propTypes: {
-    params: React.PropTypes.object.isRequired
+    storageAccount: React.PropTypes.string.isRequired,
+    container: React.PropTypes.string.isRequired
   },
 
   getInitialState: function() {
@@ -24,7 +25,7 @@ const BlobContainerViewer = React.createClass({
   },
 
   onResourcesChange: function(resources) {
-    const path = `${this.props.params.storageAccount}.${this.props.params.container}.${this.state.prefix}`;
+    const path = `${this.props.storageAccount}.${this.props.container}.${this.state.prefix}`;
 
     if (!_.has(resources, path)) {
       return;
@@ -37,7 +38,7 @@ const BlobContainerViewer = React.createClass({
 
   onListBlobsFormSubmit: function(prefix) {
     this.setState({prefix: prefix});
-    ResourceActions.loadBlobList(this.props.params.storageAccount, this.props.params.container, prefix);
+    ResourceActions.loadBlobList(this.props.storageAccount, this.props.container, prefix);
   },
 
   getTableRow: function(blobMetadata) {

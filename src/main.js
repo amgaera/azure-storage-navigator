@@ -2,11 +2,9 @@
 
 const React = require('react');
 const ReactDom = require('react-dom');
-const ReactRouter = require('react-router');
-const Router = ReactRouter.Router;
 
-const routes = require('./routes');
+const App = require('./components/app');
 const InitializeActions = require('./actions/initializeActions');
 
 InitializeActions.initializeApp();
-ReactDom.render(<Router>{routes}</Router>, document.getElementById('app'));
+ReactDom.render(<App />, document.getElementById('app'));
