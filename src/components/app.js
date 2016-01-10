@@ -4,7 +4,7 @@ const React = require('react');
 $ = jQuery = require('jquery');
 
 const AccountsPane = require('./accounts/accountsPane');
-const TabList = require('./common/tabList');
+const TabList = require('./tabs/tabList');
 
 const App = React.createClass({
   render: function() {
