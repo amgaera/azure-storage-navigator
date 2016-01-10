@@ -4,16 +4,14 @@ const React = require('react');
 $ = jQuery = require('jquery');
 
 const AccountsPane = require('./accounts/accountsPane');
-const TabList = require('./tabs/tabList');
+const TabPane = require('./tabs/tabPane');
 
 const App = React.createClass({
   render: function() {
     return (
       <div>
         <AccountsPane />
-        <div className="main-pane panel panel-default">
-          <TabList/>
-        </div>
+        <TabPane />
       </div>
     );
   }
