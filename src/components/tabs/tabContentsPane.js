@@ -8,7 +8,8 @@ const routes = require('../../routes');
 
 const TabContentsPane = React.createClass({
   propTypes: {
-    activeTab: React.PropTypes.object.isRequired
+    openTabs: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+    activeTabIndex: React.PropTypes.number.isRequired
   },
 
   getInitialState: function() {
@@ -17,7 +18,7 @@ const TabContentsPane = React.createClass({
     };
   },
 
-  getActiveTabContents: function(tabData) {
+  getTabContents: function(tabData) {
     let tabContents = this.state.tabContents[tabData.contentUrl];
 
     if (tabContents) {
@@ -33,8 +34,23 @@ const TabContentsPane = React.createClass({
     return tabContents;
   },
 
+  wrapTabContents: function(tabContents, tabIndex) {
+    const panelClass = tabIndex === this.props.activeTabIndex ? 'tab-pane show' : 'tab-pane hidden';
+
+    return (
+      <div key={tabIndex} role="tabpanel" className={panelClass}>{tabContents}</div>
+    );
+  },
+
   render: function() {
-    return this.getActiveTabContents(this.props.activeTab);
+    const tabContents = _.map(this.props.openTabs, this.getTabContents);
+    const tabPanels = _.map(tabContents, this.wrapTabContents);
+
+    return (
+      <div className="tab-content">
+        {tabPanels}
+      </div>
+    );
   }
 });
 

@@ -19,7 +19,7 @@ const TabPane = React.createClass({
         <div className="panel-heading">
           <TabList openTabs={openTabs} activeTabIndex={activeTabIndex} />
         </div>
-        <TabContentsPane activeTab={openTabs[activeTabIndex]} />
+        <TabContentsPane openTabs={openTabs} activeTabIndex={activeTabIndex} />
       </div>
     );
   }
